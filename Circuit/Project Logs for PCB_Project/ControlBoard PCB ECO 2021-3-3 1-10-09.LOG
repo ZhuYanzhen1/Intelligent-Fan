@@ -1,0 +1,12 @@
+Added Component: Designator=P7(HDR1X7)
+Add component (AddParameter): Name = "BOM名称"; Value = "7P接插件"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "学习资源"; Value = "www.ooocke.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "版权归属"; Value = "源创客"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=P7-1
+Added Pin To Net: NetName=VCC Pin=P7-2
+Added Pin To Net: NetName=LCD_SCL Pin=P7-3
+Added Pin To Net: NetName=LCD_SDA Pin=P7-4
+Added Pin To Net: NetName=LCD_RST Pin=P7-5
+Added Pin To Net: NetName=LCD_DC Pin=P7-6
+Added Pin To Net: NetName=LCD_CS Pin=P7-7
+Added Member To Class: ClassName=ControlBoard Member=Component P7 HDR-1X7

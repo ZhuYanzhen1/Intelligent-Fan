@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=GND Pin=LCD-2
+Removed Pin From Net: NetName=GND Pin=LCD-3
+Removed Pin From Net: NetName=VCC Pin=LCD-4
+Removed Pin From Net: NetName=GND Pin=LCD-5
+Removed Pin From Net: NetName=LCD_RST Pin=LCD-6
+Removed Pin From Net: NetName=LCD_DC Pin=LCD-7
+Removed Pin From Net: NetName=LCD_SDA Pin=LCD-8
+Removed Pin From Net: NetName=LCD_SCL Pin=LCD-9
+Removed Pin From Net: NetName=VCC Pin=LCD-10
+Removed Pin From Net: NetName=VCC Pin=LCD-11
+Removed Pin From Net: NetName=LCD_CS Pin=LCD-12
+Removed Pin From Net: NetName=GND Pin=LCD-13
+Removed Member From Class: ClassName=ControlBoard Member=LCD
