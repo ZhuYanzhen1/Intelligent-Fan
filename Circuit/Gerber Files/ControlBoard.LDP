@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: D:\Desktop\Intelligent-Fan\Circuit\ControlBoard.PcbDoc
+LayersSetName=Top_Bot_Thru_Holes|DrillFile=controlboard-roundholes.txt|DrillLayers=gtl,gbl
+LayersSetName=Top_Bot_Slot_Holes|DrillFile=controlboard-slotholes.txt|DrillLayers=gtl,gbl
