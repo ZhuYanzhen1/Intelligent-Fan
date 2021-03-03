@@ -8,5 +8,9 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "lcd.h"
+
+///////////// Device /////////////
+#include "gui.h"
 
 #endif /* __MAIN_H */
