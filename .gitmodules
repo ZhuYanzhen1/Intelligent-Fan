@@ -1,3 +1,3 @@
 [submodule "ESP8266-SDK"]
 	path = ESP8266-SDK
-	url = git@gitee.com:zhuyanzhen1/esp8266-sdk.git
+	url = https://gitee.com/zhuyanzhen1/esp8266-sdk
