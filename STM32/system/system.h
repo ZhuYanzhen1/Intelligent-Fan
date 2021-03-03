@@ -8,5 +8,7 @@
 #include "stm32f1xx_hal.h"
 
 void Clock_Config(void);
+void Delayms(unsigned int xms);
+void Delayus(unsigned int xus);
 
 #endif //STM32_SYSTEM_SYSTEM_H_

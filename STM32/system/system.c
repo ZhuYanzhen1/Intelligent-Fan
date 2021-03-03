@@ -6,6 +6,12 @@
 
 TIM_HandleTypeDef htim4;
 
+void Delayms(unsigned int xms) {
+
+}
+void Delayus(unsigned int xus) {
+
+}
 void Clock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
