@@ -21,14 +21,13 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 
-static const char *TAG = "MQTT";
-
 static EventGroupHandle_t wifi_event_group;
 const static int CONNECTED_BIT = BIT0;
 
 
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 {
+	static const char *TAG = "MQTT";
     esp_mqtt_client_handle_t client = event->client;
     int msg_id;
     switch (event->event_id) {
@@ -62,6 +61,7 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
+	static const char *TAG = "WIFI";
     system_event_info_t *info = &event->event_info;
     switch (event->event_id) {
         case SYSTEM_EVENT_STA_START:
@@ -85,6 +85,7 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 
 static void wifi_init(void)
 {
+	static const char *TAG = "WIFI";
     tcpip_adapter_init();
     wifi_event_group = xEventGroupCreate();
     ESP_ERROR_CHECK(esp_event_loop_init(wifi_event_handler, NULL));
@@ -117,7 +118,8 @@ static void mqtt_app_start(void)
 
 static void initialize_sntp(void)
 {
-	ESP_LOGI(TAG, "Initializing SNTP\n");
+	static const char *TAG = "SNTP";
+	ESP_LOGI(TAG, "Initializing SNTP");
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "pool.ntp.org");
     sntp_init();
@@ -125,13 +127,14 @@ static void initialize_sntp(void)
 
 static void obtain_time(void)
 {
+	static const char *TAG = "SNTP";
     time_t now = 0;
     struct tm timeinfo = { 0 };
     int retry = 0;
     const int retry_count = 10;
     initialize_sntp();
     while (timeinfo.tm_year < (2016 - 1900) && ++retry < retry_count) {
-        ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)\n", retry, retry_count);
+        ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
         time(&now);
         localtime_r(&now, &timeinfo);
@@ -140,13 +143,14 @@ static void obtain_time(void)
 
 void sntp_example_task(void *arg)
 {
+	static const char *TAG = "SNTP";
     time_t now;
     struct tm timeinfo;
     char strftime_buf[64];
     time(&now);
     localtime_r(&now, &timeinfo);
     if (timeinfo.tm_year < (2016 - 1900)) {
-        ESP_LOGE(TAG, "Time is not set yet. Connecting to WiFi and getting time over NTP.\n");
+        ESP_LOGI(TAG, "Connecting to WiFi and getting time over NTP.");
         obtain_time();
     }
     setenv("TZ", "CST-8", 1);
@@ -155,12 +159,12 @@ void sntp_example_task(void *arg)
         time(&now);
         localtime_r(&now, &timeinfo);
         if (timeinfo.tm_year < (2016 - 1900)) {
-            ESP_LOGE(TAG,"The current date/time error\n");
+            ESP_LOGE(TAG,"The current date/time error");
         } else {
             strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
-            ESP_LOGI(TAG, "The current time is: %s\n", strftime_buf);
+            ESP_LOGI(TAG, "The current time is: %s", strftime_buf);
         }
-        vTaskDelay(1000 / portTICK_RATE_MS);
+        vTaskDelay(10000 / portTICK_RATE_MS);
     }
 }
 
