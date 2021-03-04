@@ -13,4 +13,8 @@
 ///////////// Device /////////////
 #include "gui.h"
 
+///////////// FreeRTOS /////////////
+#include "FreeRTOS.h"
+#include "task.h"
+
 #endif /* __MAIN_H */
