@@ -16,6 +16,7 @@
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
+#include "lwip/apps/sntp.h"
 
 #include "esp_log.h"
 #include "mqtt_client.h"
@@ -33,7 +34,6 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-
             msg_id = esp_mqtt_client_subscribe(client, "/topic/fan", 0);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
             break;
@@ -72,9 +72,8 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             break;
         case SYSTEM_EVENT_STA_DISCONNECTED:
             ESP_LOGE(TAG, "Disconnect reason : %d", info->disconnected.reason);
-            if (info->disconnected.reason == WIFI_REASON_BASIC_RATE_NOT_SUPPORT) {
+            if (info->disconnected.reason == WIFI_REASON_BASIC_RATE_NOT_SUPPORT)
                 esp_wifi_set_protocol(ESP_IF_WIFI_STA, WIFI_PROTOCAL_11B | WIFI_PROTOCAL_11G | WIFI_PROTOCAL_11N);
-            }
             esp_wifi_connect();
             xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
             break;
@@ -112,33 +111,57 @@ static void mqtt_app_start(void)
         .uri = CONFIG_BROKER_URL,
         .event_handle = mqtt_event_handler,
     };
-
-#if CONFIG_BROKER_URL_FROM_STDIN
-    char line[128];
-    if (strcmp(mqtt_cfg.uri, "FROM_STDIN") == 0) {
-        int count = 0;
-        printf("Please enter url of mqtt broker\n");
-        while (count < 128) {
-            int c = fgetc(stdin);
-            if (c == '\n') {
-                line[count] = '\0';
-                break;
-            } else if (c > 0 && c < 127) {
-                line[count] = c;
-                ++count;
-            }
-            vTaskDelay(10 / portTICK_PERIOD_MS);
-        }
-        mqtt_cfg.uri = line;
-        printf("Broker url: %s\n", line);
-    } else {
-        ESP_LOGE(TAG, "Configuration mismatch: wrong broker url");
-        abort();
-    }
-#endif /* CONFIG_BROKER_URL_FROM_STDIN */
-
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_start(client);
+}
+
+static void initialize_sntp(void)
+{
+	ESP_LOGI(TAG, "Initializing SNTP\n");
+    sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    sntp_setservername(0, "pool.ntp.org");
+    sntp_init();
+}
+
+static void obtain_time(void)
+{
+    time_t now = 0;
+    struct tm timeinfo = { 0 };
+    int retry = 0;
+    const int retry_count = 10;
+    initialize_sntp();
+    while (timeinfo.tm_year < (2016 - 1900) && ++retry < retry_count) {
+        ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)\n", retry, retry_count);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        time(&now);
+        localtime_r(&now, &timeinfo);
+    }
+}
+
+void sntp_example_task(void *arg)
+{
+    time_t now;
+    struct tm timeinfo;
+    char strftime_buf[64];
+    time(&now);
+    localtime_r(&now, &timeinfo);
+    if (timeinfo.tm_year < (2016 - 1900)) {
+        ESP_LOGE(TAG, "Time is not set yet. Connecting to WiFi and getting time over NTP.\n");
+        obtain_time();
+    }
+    setenv("TZ", "CST-8", 1);
+    tzset();
+    while (1) {
+        time(&now);
+        localtime_r(&now, &timeinfo);
+        if (timeinfo.tm_year < (2016 - 1900)) {
+            ESP_LOGE(TAG,"The current date/time error\n");
+        } else {
+            strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+            ESP_LOGI(TAG, "The current time is: %s\n", strftime_buf);
+        }
+        vTaskDelay(1000 / portTICK_RATE_MS);
+    }
 }
 
 void app_main()
@@ -152,4 +175,5 @@ void app_main()
     nvs_flash_init();
     wifi_init();
     mqtt_app_start();
+    xTaskCreate(sntp_example_task, "sntp_task", 4096, NULL, 3, NULL);
 }
