@@ -2,14 +2,21 @@
 
 ## Catalog
 
-+ [1. Develop Environments](#1-develop-environments)
-+ [2. Control Ideas](#2-control-ideas)
-+ [3. Function Design](#3-dunction-design)
-+ [4. Bill Of Materials](#4-bill-of-materials)
++ [1. Breif Introduction](#1-breif-introduction)
++ [2. Develop Environments](#2-develop-environments)
++ [3. Control Ideas](#3-control-ideas)
++ [4. Function Design](#4-function-design)
++ [5. Bill Of Materials](#5-bill-of-materials)
 
 ***
 
-### 1. Develop Environments
+### 1. Breif Introduction
+
+&nbsp;&nbsp;&nbsp;&nbsp;This repository realizes the function of an intelligent fan. The repository contains the rack model file, esp8266 networking code, STM32 code and bill of materials needed for the production of this product. The main functions of this product are remote network control and automatic temperature control.
+
+***
+
+### 2. Develop Environments
 
 + Operating System: Ubuntu 20.04LTS
 + Coding IDE: CLion 2020.2.4
@@ -18,7 +25,7 @@
 
 ***
 
-### 2. Control Ideas
+### 3. Control Ideas
 
 &nbsp;&nbsp;&nbsp;&nbsp;The main chip is stm32f103c8t6, the WiFi chip uses esp8266ex, the temperature sampling chip uses DS18B20, and the display screen uses 1.8-inch TFT LCD screen to realize the networking time synchronization function. The matrix keyboard is used
 
@@ -27,7 +34,7 @@
 
 ***
 
-### 3. Function Design
+### 4. Function Design
 
 1. Manual control (through keyboard setting, LCD screen display status, display time and fan gear)
 
@@ -53,7 +60,7 @@
 
 ***
 
-### 4. Bill Of Materials
+### 5. Bill Of Materials
 
 |      Name       | Quantity |                        Purchase Link                         | Total Price |
 | :-------------: | :------: | :----------------------------------------------------------: | :---------: |
