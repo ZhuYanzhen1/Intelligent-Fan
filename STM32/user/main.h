@@ -3,6 +3,7 @@
 
 ///////////// System /////////////
 #include "system.h"
+#include "usertask.h"
 
 ///////////// Hardware /////////////
 #include "tim.h"

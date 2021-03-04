@@ -3,15 +3,55 @@
 //
 
 #include "system.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 TIM_HandleTypeDef htim4;
+static unsigned int Facus = 0;
+static unsigned int Facms = 0;
+
+void Delayus(unsigned int xus) {
+    unsigned int Ticks, Time_Old, Time_Now, Time_Count = 0;
+    unsigned int Reload = SysTick->LOAD;
+    Ticks = xus * Facus;
+    Time_Old = SysTick->VAL;
+    while (1) {
+        Time_Now = SysTick->VAL;
+        if (Time_Now != Time_Old) {
+            if (Time_Now < Time_Old)
+                Time_Count += Time_Old - Time_Now;
+            else
+                Time_Count += Reload - Time_Now + Time_Old;
+            Time_Old = Time_Now;
+            if (Time_Count >= Ticks)
+                break;
+        }
+    }
+}
 
 void Delayms(unsigned int xms) {
-
+    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING) {
+        if (xms >= Facms)
+            vTaskDelay(xms / Facms);
+        else {
+            xms %= Facms;
+            Delayus(xms * 1000);
+        }
+    } else
+        Delayus(xms * 1000);
 }
-void Delayus(unsigned int xus) {
 
+void Delay_Config(void) {
+    unsigned int Reload;
+    Facus = HAL_RCC_GetSysClockFreq() / 1000000;
+    Reload = HAL_RCC_GetSysClockFreq() / 1000000;
+    Reload *= 1000000 / configTICK_RATE_HZ;
+    Facms = 1000 / configTICK_RATE_HZ;
+    SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
+    SysTick->LOAD = Reload;
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
+
 void Clock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};

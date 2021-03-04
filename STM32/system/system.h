@@ -10,5 +10,6 @@
 void Clock_Config(void);
 void Delayms(unsigned int xms);
 void Delayus(unsigned int xus);
+void Delay_Config(void);
 
 #endif //STM32_SYSTEM_SYSTEM_H_
