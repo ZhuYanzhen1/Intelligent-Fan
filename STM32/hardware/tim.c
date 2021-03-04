@@ -21,7 +21,7 @@ void TIM3_Config(void) {
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     while (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK);
     HAL_TIM_MspPostInit(&htim3);
-
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 }
 
 void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *tim_pwmHandle) {

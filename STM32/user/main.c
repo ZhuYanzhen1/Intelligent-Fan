@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main(void) {
-    HAL_Init();
+    HAL_Config();
     Clock_Config();
     GPIO_Config();
     TIM3_Config();
