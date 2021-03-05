@@ -50,7 +50,8 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-            printf("%.*s\r\n", event->data_len, event->data);
+            printf("^%.*s&", event->data_len, event->data);
+            fflush(stdout);
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -122,6 +123,11 @@ static void initialize_sntp(void)
 	ESP_LOGI(TAG, "Initializing SNTP");
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
     sntp_setservername(0, "pool.ntp.org");
+    sntp_setservername(1, "ntp1.aliyun.com");
+    sntp_setservername(2, "210.72.145.44");
+    sntp_setservername(3, "0.cn.pool.ntp.org");
+	sntp_setservername(4, "1.cn.pool.ntp.org");
+	sntp_setservername(5, "2.cn.pool.ntp.org");       
     sntp_init();
 }
 
@@ -133,7 +139,7 @@ static void obtain_time(void)
     int retry = 0;
     const int retry_count = 10;
     initialize_sntp();
-    while (timeinfo.tm_year < (2016 - 1900) && ++retry < retry_count) {
+    while (timeinfo.tm_year < (2020 - 1900) && ++retry < retry_count) {
         ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
         time(&now);
@@ -149,7 +155,7 @@ void sntp_example_task(void *arg)
     char strftime_buf[64];
     time(&now);
     localtime_r(&now, &timeinfo);
-    if (timeinfo.tm_year < (2016 - 1900)) {
+    if (timeinfo.tm_year < (2020 - 1900)) {
         ESP_LOGI(TAG, "Connecting to WiFi and getting time over NTP.");
         obtain_time();
     }
@@ -158,18 +164,22 @@ void sntp_example_task(void *arg)
     while (1) {
         time(&now);
         localtime_r(&now, &timeinfo);
-        if (timeinfo.tm_year < (2016 - 1900)) {
-            ESP_LOGE(TAG,"The current date/time error");
+        if (timeinfo.tm_year < (2020 - 1900)) {
+            printf("*Time Error&");
+            fflush(stdout);
         } else {
             strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
             ESP_LOGI(TAG, "The current time is: %s", strftime_buf);
+            printf("*%d:%d:%d&", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+            fflush(stdout);
         }
-        vTaskDelay(10000 / portTICK_RATE_MS);
+        vTaskDelay(1000 / portTICK_RATE_MS);
     }
 }
 
 void app_main()
 {
+	esp_log_level_set("wifi", ESP_LOG_INFO);
     esp_log_level_set("*", ESP_LOG_INFO);
     esp_log_level_set("MQTT_CLIENT", ESP_LOG_VERBOSE);
     esp_log_level_set("TRANSPORT_TCP", ESP_LOG_VERBOSE);
