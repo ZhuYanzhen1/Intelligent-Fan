@@ -39,9 +39,15 @@ if __name__ == '__main__':
     sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '..'))
     sys.path.append("..")
     window = Tk()
+    sw = window.winfo_screenwidth()
+    sh = window.winfo_screenheight()
+    ww = 250
+    wh = 100
+    x = (sw-ww) / 2
+    y = (sh-wh) / 2
     window.title("客户端")
     window.resizable(0, 0)
-    window.geometry("250x100")
+    window.geometry("%dx%d+%d+%d" %(ww,wh,x,y))
     lable = Label(window, text='你好，这是智能风扇的客户端',
                 font=('Arial', 10), width=30, height=2)
     btn = Button(window, text="打开风扇", font=('Arial', 20),
