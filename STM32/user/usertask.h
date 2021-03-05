@@ -5,7 +5,6 @@
 #ifndef _USER_USERTASK_H_
 #define _USER_USERTASK_H_
 
-void LEDTask(void *pvParameter);
 void UserTask(void *pvParameter);
 
 #endif //_USER_USERTASK_H_

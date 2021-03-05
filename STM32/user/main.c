@@ -2,6 +2,13 @@
 
 TaskHandle_t InitTask_Handler, LEDTask_Handler, UserTask_Handler;
 
+void LEDTask(void *pvParameter) {
+    while (1) {
+        Delayms(500);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+    }
+}
+
 void InitTask(void *pvParameters) {
     taskENTER_CRITICAL();
     GPIO_Config();
