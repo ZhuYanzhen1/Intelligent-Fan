@@ -40,6 +40,7 @@ if __name__ == '__main__':
     sys.path.append("..")
     window = Tk()
     window.title("客户端")
+    window.resizable(0, 0)
     window.geometry("250x100")
     lable = Label(window, text='你好，这是智能风扇的客户端',
                 font=('Arial', 10), width=30, height=2)
