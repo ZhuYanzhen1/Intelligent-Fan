@@ -1,6 +1,39 @@
 #include "usart.h"
 
 UART_HandleTypeDef huart1;
+unsigned char aRxBuffer[1];
+unsigned char time_receive_flag = 0;
+unsigned char fan_receive_flag = 0;
+unsigned char rcv_time_buffer[32], rcv_time_counter = 0;
+unsigned char rcv_fan_buffer[16], rcv_fan_counter = 0;
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    switch (aRxBuffer[0]) {
+        case '^':fan_receive_flag = 1;
+            break;
+        case '*':time_receive_flag = 1;
+            break;
+        case '$':
+            fan_receive_flag = 0;
+            rcv_fan_counter = 0;
+            break;
+        case '&':
+            time_receive_flag = 0;
+            rcv_time_counter = 0;
+            break;
+        default:
+            if (fan_receive_flag == 1) {
+                rcv_fan_buffer[rcv_fan_counter] = aRxBuffer[0];
+                rcv_fan_counter++;
+            }
+            if (time_receive_flag == 1) {
+                rcv_time_buffer[rcv_time_counter] = aRxBuffer[0];
+                rcv_time_counter++;
+            }
+            break;
+    }
+    HAL_UART_Receive_IT(&huart1, (uint8_t *) aRxBuffer, 1);
+}
 
 void UART1_Config(void) {
     huart1.Instance = USART1;
@@ -12,6 +45,7 @@ void UART1_Config(void) {
     huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart1.Init.OverSampling = UART_OVERSAMPLING_16;
     while (HAL_UART_Init(&huart1) != HAL_OK);
+    HAL_UART_Receive_IT(&huart1, (uint8_t *) aRxBuffer, 1);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle) {
