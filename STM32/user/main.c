@@ -13,6 +13,7 @@ void InitTask(void *pvParameters) {
     taskENTER_CRITICAL();
     GPIO_Config();
     LED_Config();
+    DS18B20_Config();
     TIM3_Config();
     UART1_Config();
     LCD_Config();

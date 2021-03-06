@@ -12,6 +12,7 @@
 #include "gpio.h"
 #include "lcd.h"
 #include "led.h"
+#include "ds18b20.h"
 
 ///////////// Device /////////////
 #include "gui.h"
