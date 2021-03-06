@@ -2,6 +2,7 @@
 
 Menu_Struct_t Menu;
 TaskHandle_t InitTask_Handler, UserTask_Handler;
+TaskHandle_t CircleTask_Handler;
 
 void Menu_Config(void) {
     memset(&Menu, 0x00, sizeof(Menu_Struct_t));
@@ -22,6 +23,8 @@ void InitTask(void *pvParameters) {
     Menu_Config();
     xTaskCreate(UserTask, "UserTask", 512,
                 NULL, 2, &UserTask_Handler);
+    xTaskCreate(CircleTask, "CircleTask", 512,
+                NULL, 2, &CircleTask_Handler);
     vTaskDelete(NULL);
     taskEXIT_CRITICAL();
 }
