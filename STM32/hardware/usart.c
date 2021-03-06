@@ -1,4 +1,5 @@
 #include "usart.h"
+#include "fan.h"
 
 UART_HandleTypeDef huart1;
 unsigned char aRxBuffer[1];
@@ -13,12 +14,17 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             break;
         case '*':time_receive_flag = 1;
             break;
-        case '$':
-            fan_receive_flag = 0;
+        case '$':fan_receive_flag = 0;
             rcv_fan_counter = 0;
+            if (rcv_fan_buffer[0] == 'o' &&
+                rcv_fan_buffer[1] == 'n')
+                Fan_On(80);
+            else if (rcv_fan_buffer[0] == 'o' &&
+                rcv_fan_buffer[1] == 'f' &&
+                rcv_fan_buffer[2] == 'f')
+                Fan_Off();
             break;
-        case '&':
-            time_receive_flag = 0;
+        case '&':time_receive_flag = 0;
             rcv_time_counter = 0;
             break;
         default:
