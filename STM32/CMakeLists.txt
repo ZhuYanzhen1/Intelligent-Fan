@@ -47,12 +47,13 @@ else ()
 endif ()
 
 include_directories(system drivers/STM32F1xx_HAL_Driver/Inc drivers/STM32F1xx_HAL_Driver/Inc/Legacy
-        drivers/CMSIS/Device/ST/STM32F1xx/Include drivers/CMSIS/Include user hardware device freertos)
+        drivers/CMSIS/Device/ST/STM32F1xx/Include drivers/CMSIS/Include user hardware device freertos
+        logic)
 
 add_definitions(-DUSE_HAL_DRIVER -DSTM32F103xB)
 
 file(GLOB_RECURSE SOURCES "system/*.s" "drivers/*.*" "user/*.c" "hardware/*.c" "system/*.c" "device/*.c"
-        "freertos/*.c")
+        "freertos/*.c" "logic/*.c")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F103C8Tx_FLASH.ld)
 

@@ -14,6 +14,10 @@
 
 ///////////// Device /////////////
 #include "gui.h"
+#include "fan.h"
+
+///////////// Logic /////////////
+#include "menu.h"
 
 ///////////// FreeRTOS /////////////
 #include "FreeRTOS.h"

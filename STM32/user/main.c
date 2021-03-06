@@ -1,5 +1,6 @@
 #include "main.h"
 
+Menu_Struct_t Menu;
 TaskHandle_t InitTask_Handler, UserTask_Handler;
 
 void InitTask(void *pvParameters) {

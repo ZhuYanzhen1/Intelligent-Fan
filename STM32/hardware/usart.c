@@ -1,11 +1,12 @@
 #include "usart.h"
 #include "fan.h"
+#include "menu.h"
 
 UART_HandleTypeDef huart1;
 unsigned char aRxBuffer[1];
 unsigned char time_receive_flag = 0;
 unsigned char fan_receive_flag = 0;
-unsigned char rcv_time_buffer[32], rcv_time_counter = 0;
+unsigned char rcv_time_buffer[16], rcv_time_counter = 0;
 unsigned char rcv_fan_buffer[16], rcv_fan_counter = 0;
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
@@ -24,7 +25,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
                 rcv_fan_buffer[2] == 'f')
                 Fan_Off();
             break;
-        case '&':time_receive_flag = 0;
+        case '&':
+            for (unsigned char counter = 0; counter < rcv_time_counter; counter++)
+                Menu.Time_Buf[counter] = rcv_time_buffer[counter];
+            time_receive_flag = 0;
             rcv_time_counter = 0;
             break;
         default:
