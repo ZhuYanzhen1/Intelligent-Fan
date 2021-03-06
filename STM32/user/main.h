@@ -4,6 +4,7 @@
 ///////////// System /////////////
 #include "system.h"
 #include "usertask.h"
+#include "string.h"
 
 ///////////// Hardware /////////////
 #include "tim.h"
