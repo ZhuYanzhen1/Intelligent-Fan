@@ -1,24 +1,16 @@
 #include "main.h"
 
-TaskHandle_t InitTask_Handler, LEDTask_Handler, UserTask_Handler;
-
-void LEDTask(void *pvParameter) {
-    while (1) {
-        Delayms(500);
-        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-    }
-}
+TaskHandle_t InitTask_Handler, UserTask_Handler;
 
 void InitTask(void *pvParameters) {
     taskENTER_CRITICAL();
     GPIO_Config();
+    LED_Config();
     TIM3_Config();
     UART1_Config();
     LCD_Config();
     LCD_Scan(4);
     GUI_Clear(C_WHITE);
-    xTaskCreate(LEDTask, "LEDTask", 64,
-                NULL, 1, &LEDTask_Handler);
     xTaskCreate(UserTask, "UserTask", 512,
                 NULL, 2, &UserTask_Handler);
     vTaskDelete(NULL);

@@ -10,6 +10,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "lcd.h"
+#include "led.h"
 
 ///////////// Device /////////////
 #include "gui.h"
