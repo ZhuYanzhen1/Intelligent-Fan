@@ -31,12 +31,12 @@ void GUI_Printf(unsigned char row,
                 unsigned int bgcolor,
                 const char *fmt,
                 ...) {
-    unsigned char LCD_BUF[32] = {0};
+    char LCD_BUF[32] = {0};
     unsigned char n = 0;
     va_list ap;
     memset(LCD_BUF, '\0', sizeof(LCD_BUF));
     va_start(ap, fmt);
-    vsprintf((char *) LCD_BUF, fmt, ap);
+    vsprintf(LCD_BUF, fmt, ap);
     va_end(ap);
     while (LCD_BUF[n] != '\0') {
         LCD_SendChar(row, line, LCD_BUF[n], dcolor, bgcolor);
