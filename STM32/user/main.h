@@ -25,5 +25,6 @@
 ///////////// FreeRTOS /////////////
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 #endif /* __MAIN_H */

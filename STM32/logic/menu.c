@@ -6,14 +6,17 @@
 #include "gui.h"
 #include "stm32f1xx_hal.h"
 #include "system.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 const char Y_Bias = 10;
+extern SemaphoreHandle_t GUI_Printf_Semaph;
 
 void MenuGUITask(void *pvParameter) {
     Menu_Struct_t Last_Menu;
     while (1) {
         switch (Menu.Index) {
-            case 1:
+            case 1:xSemaphoreTake(GUI_Printf_Semaph, 0xffffffffUL);
                 if (Last_Menu.Index != Menu.Index || Last_Menu.SubIndex != Menu.SubIndex) {
                     if (Menu.SubIndex == 1)
                         GUI_Printf(20, 25 + Y_Bias, C_WHITE, C_BLACK, "Manual Mode");
@@ -55,28 +58,49 @@ void MenuGUITask(void *pvParameter) {
                     else if (Menu.Heater_Enable == ENABLE)
                         GUI_Printf(35, 85 + Y_Bias, C_DARK_GREEN, C_WHITE, "Heating");
                 }
+                xSemaphoreGive(GUI_Printf_Semaph);
                 break;
-            case 2:Menu.SubIndex = 1;
+            case 2:xSemaphoreTake(GUI_Printf_Semaph, 0xffffffffUL);
+                Menu.SubIndex = 1;
                 if (Last_Menu.Index != Menu.Index) {
                     if (Last_Menu.Index == 1) {
                         GUI_Rectangle(32, 45 + Y_Bias, 96, 61 + Y_Bias, C_WHITE);
                         GUI_Rectangle(13, 65 + Y_Bias, 117, 81 + Y_Bias, C_WHITE);
                         GUI_Rectangle(35, 85 + Y_Bias, 91, 101 + Y_Bias, C_WHITE);
                     }
+                    GUI_Printf(32, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Temperature / 100);
+                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C", Menu.Temperature % 100);
                     GUI_Printf(20, 25 + Y_Bias, C_WHITE, C_BLACK, "Temp   Mode");
                 }
+                if (Menu.Temperature != Last_Menu.Temperature) {
+                    GUI_Printf(32, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Temperature / 100);
+                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C", Menu.Temperature % 100);
+                }
+                xSemaphoreGive(GUI_Printf_Semaph);
                 break;
-            case 3:Menu.SubIndex = 1;
+            case 3:xSemaphoreTake(GUI_Printf_Semaph, 0xffffffffUL);
+                Menu.SubIndex = 1;
                 if (Last_Menu.Index != Menu.Index) {
                     if (Last_Menu.Index == 1) {
                         GUI_Rectangle(32, 45 + Y_Bias, 96, 61 + Y_Bias, C_WHITE);
                         GUI_Rectangle(13, 65 + Y_Bias, 117, 81 + Y_Bias, C_WHITE);
                         GUI_Rectangle(35, 85 + Y_Bias, 91, 101 + Y_Bias, C_WHITE);
                     }
+                    if (Menu.Body_Detect == 1)
+                        GUI_Printf(32, 45 + Y_Bias, C_GREEN, C_WHITE, "Detected");
+                    else if (Menu.Body_Detect == 0)
+                        GUI_Printf(32, 45 + Y_Bias, C_RED, C_WHITE, "Detected");
                     GUI_Printf(20, 25 + Y_Bias, C_WHITE, C_BLACK, "Auto   Mode");
                 }
+                if (Last_Menu.Body_Detect != Menu.Body_Detect && Menu.Body_Detect == 1)
+                    GUI_Printf(32, 45 + Y_Bias, C_GREEN, C_WHITE, "Detected");
+                else if (Last_Menu.Body_Detect != Menu.Body_Detect && Menu.Body_Detect == 0)
+                    GUI_Printf(32, 45 + Y_Bias, C_RED, C_WHITE, "Detected");
+                xSemaphoreGive(GUI_Printf_Semaph);
                 break;
         }
+        Last_Menu.Temperature = Menu.Temperature;
+        Last_Menu.Body_Detect = Menu.Body_Detect;
         Last_Menu.Index = Menu.Index;
         Last_Menu.SubIndex = Menu.SubIndex;
         Delayms(50);

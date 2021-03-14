@@ -12,8 +12,7 @@ void Menu_Config(void) {
     Menu.Index = 1;
     Menu.SubIndex = 1;
     Menu.Body_Detect = 0;
-    for (unsigned char counter = 0; counter < sizeof(buf); counter++)
-        Menu.Time_Buf[counter] = buf[counter];
+    strcpy((char *) Menu.Time_Buf, buf);
 }
 
 void InitTask(void *pvParameters) {
@@ -24,6 +23,7 @@ void InitTask(void *pvParameters) {
     TIM3_Config();
     Fan_Off();
     UART1_Config();
+    Semaphore_Config();
     LCD_Config();
     LCD_Scan(4);
     GUI_Clear(C_WHITE);

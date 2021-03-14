@@ -4,23 +4,19 @@
 
 #include "main.h"
 
+SemaphoreHandle_t GUI_Printf_Semaph;
+
+void Semaphore_Config() {
+    GUI_Printf_Semaph = xSemaphoreCreateMutex();
+}
+
 void CircleTask(void *pvParameters) {
     while (1) {
-        for (unsigned char counter = 0; counter < 5; counter++) {
-            Menu.Temperature = DS18B20_GetTemp();
-            if (Menu.Index == 2) {
-                GUI_Printf(32, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Temperature / 100);
-                GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C", Menu.Temperature % 100);
-            }
-            if (Menu.Index == 3) {
-                if (Menu.Body_Detect == 1)
-                    GUI_Printf(32, 45 + Y_Bias, C_GREEN, C_WHITE, "Detected");
-                else if (Menu.Body_Detect == 0)
-                    GUI_Printf(32, 45 + Y_Bias, C_RED, C_WHITE, "Detected");
-            }
-            Delayms(200);
-        }
+        Menu.Temperature = DS18B20_GetTemp();
+        xSemaphoreTake(GUI_Printf_Semaph, 0xffffffffUL);
         GUI_Printf(30, 8 + Y_Bias, C_BLACK, C_WHITE, "%s", Menu.Time_Buf);
+        xSemaphoreGive(GUI_Printf_Semaph);
+        Delayms(1000);
     }
 }
 
