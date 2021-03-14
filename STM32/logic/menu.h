@@ -7,9 +7,9 @@
 
 typedef struct {
     unsigned char Enable;
-    unsigned char Hour;
-    unsigned char Minute;
-    unsigned char Second;
+    char Hour;
+    char Minute;
+    char Second;
 } Timer_Struct_t;
 
 typedef struct {
@@ -19,10 +19,12 @@ typedef struct {
     unsigned char Heater_Enable;
     Timer_Struct_t Timer;
     unsigned char Body_Detect;
-    unsigned char Fan_Speed;
+    char Fan_Speed;
     unsigned short Temperature;
 } Menu_Struct_t;
 
 extern Menu_Struct_t Menu;
+extern const char Y_Bias;
+void MenuGUITask(void *pvParameter);
 
 #endif //STM32_LOGIC_MENU_H_

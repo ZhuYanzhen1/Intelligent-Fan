@@ -13,6 +13,7 @@
 #include "lcd.h"
 #include "led.h"
 #include "ds18b20.h"
+#include "key.h"
 
 ///////////// Device /////////////
 #include "gui.h"
@@ -24,5 +25,6 @@
 ///////////// FreeRTOS /////////////
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 #endif /* __MAIN_H */

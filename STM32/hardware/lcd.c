@@ -94,8 +94,6 @@ void LCD_Scan(unsigned char mode) {
 }
 
 void LCD_Config() {
-    unsigned char result = 0;
-
     HAL_GPIO_WritePin(LCD_RES_Port, LCD_RES_Pin, GPIO_PIN_SET);
     Delayus(1000);
     HAL_GPIO_WritePin(LCD_RES_Port, LCD_RES_Pin, GPIO_PIN_RESET);

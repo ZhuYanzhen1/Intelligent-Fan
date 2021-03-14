@@ -11,6 +11,7 @@ void LCD_SendChar(unsigned char x,
                   unsigned int dcolor,
                   unsigned int bgcolor) {
     unsigned char i, j;
+    dcolor = TransColor(dcolor);
     unsigned char *temp = (unsigned char *) &Font_8_16[0];
     temp += (value - 32) * 16;
     Address_set(x, line, x + 7, line + 15);
