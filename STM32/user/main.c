@@ -8,6 +8,8 @@ void Menu_Config(void) {
     memset(&Menu, 0x00, sizeof(Menu_Struct_t));
     Menu.Timer.Enable = DISABLE;
     Menu.Heater_Enable = DISABLE;
+    Menu.Index = 1;
+    Menu.SubIndex = 1;
 }
 
 void InitTask(void *pvParameters) {
