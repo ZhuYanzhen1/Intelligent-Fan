@@ -10,6 +10,7 @@ void Menu_Config(void) {
     Menu.Heater_Enable = DISABLE;
     Menu.Index = 1;
     Menu.SubIndex = 1;
+    Menu.Body_Detect = 0;
 }
 
 void InitTask(void *pvParameters) {
