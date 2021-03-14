@@ -19,11 +19,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             rcv_fan_counter = 0;
             if (rcv_fan_buffer[0] == 'o' &&
                 rcv_fan_buffer[1] == 'n')
-                Fan_On(20);
+                Menu.Fan_Speed = 20;
             else if (rcv_fan_buffer[0] == 'o' &&
                 rcv_fan_buffer[1] == 'f' &&
                 rcv_fan_buffer[2] == 'f')
-                Fan_Off();
+                Menu.Fan_Speed = 0;
             break;
         case '&':
             for (unsigned char counter = 0; counter < rcv_time_counter; counter++)
