@@ -12,6 +12,40 @@
 const char Y_Bias = 10;
 extern SemaphoreHandle_t GUI_Printf_Semaph;
 
+void Refresh_Data(Menu_Struct_t *LastMenu) {
+    if (LastMenu->Fan_Speed != Menu.Fan_Speed && Menu.SubIndex == 2)
+        GUI_Printf(80, 45 + Y_Bias, C_WHITE, C_BLACK, "%02d", Menu.Fan_Speed);
+    else if (LastMenu->Fan_Speed != Menu.Fan_Speed)
+        GUI_Printf(80, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Fan_Speed);
+    if (LastMenu->Timer.Hour != Menu.Timer.Hour && Menu.SubIndex == 4)
+        GUI_Printf(53, 65 + Y_Bias, C_WHITE, C_BLACK, "%02d", Menu.Timer.Hour);
+    else if (LastMenu->Timer.Hour != Menu.Timer.Hour)
+        GUI_Printf(53, 65 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Timer.Hour);
+    if (LastMenu->Timer.Minute != Menu.Timer.Minute && Menu.SubIndex == 5)
+        GUI_Printf(77, 65 + Y_Bias, C_WHITE, C_BLACK, "%02d", Menu.Timer.Minute);
+    else if (LastMenu->Timer.Minute != Menu.Timer.Minute)
+        GUI_Printf(77, 65 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Timer.Minute);
+    if (LastMenu->Timer.Second != Menu.Timer.Second && Menu.SubIndex == 6)
+        GUI_Printf(101, 65 + Y_Bias, C_WHITE, C_BLACK, "%02d", Menu.Timer.Second);
+    else if (LastMenu->Timer.Second != Menu.Timer.Second)
+        GUI_Printf(101, 65 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Timer.Second);
+    if (Menu.Heater_Enable != LastMenu->Heater_Enable && Menu.Heater_Enable == DISABLE)
+        GUI_Printf(35, 85 + Y_Bias, C_DARK_RED, C_BLACK, "Heating");
+    else if (Menu.Heater_Enable != LastMenu->Heater_Enable && Menu.Heater_Enable == ENABLE)
+        GUI_Printf(35, 85 + Y_Bias, C_DARK_GREEN, C_BLACK, "Heating");
+    if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == DISABLE)
+        GUI_Printf(13, 65 + Y_Bias, C_DARK_RED, C_BLACK, "Time");
+    else if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == ENABLE)
+        GUI_Printf(13, 65 + Y_Bias, C_DARK_GREEN, C_BLACK, "Time");
+
+    LastMenu->Fan_Speed = Menu.Fan_Speed;
+    LastMenu->Timer.Hour = Menu.Timer.Hour;
+    LastMenu->Timer.Minute = Menu.Timer.Minute;
+    LastMenu->Timer.Second = Menu.Timer.Second;
+    LastMenu->Timer.Enable = Menu.Timer.Enable;
+    LastMenu->Heater_Enable = Menu.Heater_Enable;
+}
+
 void MenuGUITask(void *pvParameter) {
     Menu_Struct_t Last_Menu;
     while (1) {
@@ -58,6 +92,7 @@ void MenuGUITask(void *pvParameter) {
                     else if (Menu.Heater_Enable == ENABLE)
                         GUI_Printf(35, 85 + Y_Bias, C_DARK_GREEN, C_WHITE, "Heating");
                 }
+                Refresh_Data(&Last_Menu);
                 xSemaphoreGive(GUI_Printf_Semaph);
                 break;
             case 2:xSemaphoreTake(GUI_Printf_Semaph, 0xffffffffUL);
@@ -69,12 +104,12 @@ void MenuGUITask(void *pvParameter) {
                         GUI_Rectangle(35, 85 + Y_Bias, 91, 101 + Y_Bias, C_WHITE);
                     }
                     GUI_Printf(32, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Temperature / 100);
-                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C", Menu.Temperature % 100);
+                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C ", Menu.Temperature % 100);
                     GUI_Printf(20, 25 + Y_Bias, C_WHITE, C_BLACK, "Temp   Mode");
                 }
                 if (Menu.Temperature != Last_Menu.Temperature) {
                     GUI_Printf(32, 45 + Y_Bias, C_BLACK, C_WHITE, "%02d", Menu.Temperature / 100);
-                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C", Menu.Temperature % 100);
+                    GUI_Printf(48, 45 + Y_Bias, C_BLACK, C_WHITE, ".%02d C ", Menu.Temperature % 100);
                 }
                 xSemaphoreGive(GUI_Printf_Semaph);
                 break;
