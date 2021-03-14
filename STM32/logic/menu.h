@@ -24,5 +24,7 @@ typedef struct {
 } Menu_Struct_t;
 
 extern Menu_Struct_t Menu;
+extern const char Y_Bias;
+void MenuGUITask(void *pvParameter);
 
 #endif //STM32_LOGIC_MENU_H_

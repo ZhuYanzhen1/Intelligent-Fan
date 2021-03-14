@@ -6,6 +6,6 @@
 #define _USER_USERTASK_H_
 
 void UserTask(void *pvParameter);
-void CircleTask(void *pvParameter);
+void CircleTask(void *pvParameters);
 
 #endif //_USER_USERTASK_H_

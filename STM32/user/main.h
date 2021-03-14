@@ -13,6 +13,7 @@
 #include "lcd.h"
 #include "led.h"
 #include "ds18b20.h"
+#include "key.h"
 
 ///////////// Device /////////////
 #include "gui.h"
