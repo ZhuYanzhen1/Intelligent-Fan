@@ -16,10 +16,11 @@ void InitTask(void *pvParameters) {
     LED_Config();
     DS18B20_Config();
     TIM3_Config();
+    Fan_Off();
     UART1_Config();
     LCD_Config();
     LCD_Scan(4);
-    GUI_Clear(C_RED);
+    GUI_Clear(C_WHITE);
     Menu_Config();
     xTaskCreate(UserTask, "UserTask", 1024,
                 NULL, 2, &UserTask_Handler);

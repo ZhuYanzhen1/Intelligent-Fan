@@ -41,11 +41,13 @@ void CircleTask(void *pvParameter) {
 }
 
 void UserTask(void *pvParameter) {
+    unsigned char speed = 10;
     while (1) {
-        float RAM_Remain = xPortGetFreeHeapSize() / 1024.0f;
-        unsigned char KeyNum = ReadKey();
-        GUI_Printf(2, 10, C_BLACK, C_WHITE, "%d", (int) RAM_Remain);
-        Delayms((int) RAM_Remain * 100 / 1);
-        Delayms(KeyNum);
+//        float RAM_Remain = xPortGetFreeHeapSize() / 1024.0f;
+//        unsigned char KeyNum = ReadKey();
+        Delayms(1000);
+        GUI_Printf(30, 10, C_BLACK, C_WHITE, "%s", Menu.Time_Buf);
+//        Delayms((int) RAM_Remain * 100 / 1);
+//        Delayms(KeyNum);
     }
 }
