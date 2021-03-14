@@ -5,7 +5,6 @@
 #ifndef _USER_USERTASK_H_
 #define _USER_USERTASK_H_
 
-void UserTask(void *pvParameter);
 void CircleTask(void *pvParameters);
 void Semaphore_Config();
 

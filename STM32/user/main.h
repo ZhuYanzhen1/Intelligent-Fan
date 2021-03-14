@@ -21,6 +21,7 @@
 
 ///////////// Logic /////////////
 #include "menu.h"
+#include "keyboard.h"
 
 ///////////// FreeRTOS /////////////
 #include "FreeRTOS.h"
