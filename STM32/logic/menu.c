@@ -127,7 +127,7 @@ void MenuGUITask(void *pvParameter) {
                         GUI_Printf(32, 45 + Y_Bias, C_RED, C_WHITE, "Detected");
                     GUI_Printf(20, 25 + Y_Bias, C_WHITE, C_BLACK, "Auto   Mode");
                 }
-                if (Last_Menu.Body_Detect != Menu.Body_Detect && Menu.Body_Detect == 1)
+                if (Last_Menu.Body_Detect != Menu.Body_Detect && Menu.Body_Detect >= 1)
                     GUI_Printf(32, 45 + Y_Bias, C_GREEN, C_WHITE, "Detected");
                 else if (Last_Menu.Body_Detect != Menu.Body_Detect && Menu.Body_Detect == 0)
                     GUI_Printf(32, 45 + Y_Bias, C_RED, C_WHITE, "Detected");

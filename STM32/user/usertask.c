@@ -18,7 +18,14 @@ void Temp_Process() {
         Fan_On(40);
 }
 void Auto_Process() {
-
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
+        Menu.Body_Detect = 15;
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_RESET && Menu.Body_Detect != 0)
+        Menu.Body_Detect--;
+    if (Menu.Body_Detect == 0)
+        Fan_Off();
+    else
+        Fan_On(20);
 }
 void Manual_Process() {
     if (Menu.Heater_Enable == ENABLE)
