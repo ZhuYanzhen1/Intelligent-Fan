@@ -9,7 +9,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-const char Y_Bias = 10;
+const char Y_Bias = 20;
 extern SemaphoreHandle_t GUI_Printf_Semaph;
 
 void Refresh_Data(Menu_Struct_t *LastMenu) {
@@ -33,10 +33,14 @@ void Refresh_Data(Menu_Struct_t *LastMenu) {
         GUI_Printf(35, 85 + Y_Bias, C_DARK_RED, C_BLACK, "Heating");
     else if (Menu.Heater_Enable != LastMenu->Heater_Enable && Menu.Heater_Enable == ENABLE)
         GUI_Printf(35, 85 + Y_Bias, C_DARK_GREEN, C_BLACK, "Heating");
-    if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == DISABLE)
+    if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == DISABLE && Menu.SubIndex == 3)
         GUI_Printf(13, 65 + Y_Bias, C_DARK_RED, C_BLACK, "Time");
-    else if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == ENABLE)
+    else if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == DISABLE)
+        GUI_Printf(13, 65 + Y_Bias, C_DARK_RED, C_WHITE, "Time");
+    else if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == ENABLE && Menu.SubIndex == 3)
         GUI_Printf(13, 65 + Y_Bias, C_DARK_GREEN, C_BLACK, "Time");
+    else if (Menu.Timer.Enable != LastMenu->Timer.Enable && Menu.Timer.Enable == ENABLE)
+        GUI_Printf(13, 65 + Y_Bias, C_DARK_GREEN, C_WHITE, "Time");
 
     LastMenu->Fan_Speed = Menu.Fan_Speed;
     LastMenu->Timer.Hour = Menu.Timer.Hour;
