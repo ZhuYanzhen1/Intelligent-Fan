@@ -170,7 +170,7 @@ void sntp_example_task(void *arg)
         } else {
             strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
             ESP_LOGI(TAG, "The current time is: %s", strftime_buf);
-            printf("*%d:%d:%d&", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+            printf("*%02d:%02d:%02d&", timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
             fflush(stdout);
         }
         vTaskDelay(1000 / portTICK_RATE_MS);
