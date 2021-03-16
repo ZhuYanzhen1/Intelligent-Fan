@@ -17,6 +17,31 @@ void CircleTask(void *pvParameters) {
         GUI_Printf(30, 8 + Y_Bias, C_BLACK, C_WHITE, "%s", Menu.Time_Buf);
         xSemaphoreGive(GUI_Printf_Semaph);
         Delayms(1000);
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+        if (Menu.Heater_Enable == ENABLE)
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
+        else
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
+        if (Menu.Fan_Speed > 0)
+            Fan_On(Menu.Fan_Speed);
+        else if (Menu.Fan_Speed == 0)
+            Fan_Off();
+        if (Menu.Timer.Enable == ENABLE) {
+            if (Menu.Timer.Second == 0) {
+                if (Menu.Timer.Minute == 0) {
+                    if (Menu.Timer.Hour == 0) {
+                        Menu.Timer.Enable = DISABLE;
+                        Menu.Fan_Speed = 0;
+                        Fan_Off();
+                    } else {
+                        Menu.Timer.Hour--;
+                        Menu.Timer.Minute = 59;
+                    }
+                } else {
+                    Menu.Timer.Minute--;
+                    Menu.Timer.Second = 59;
+                }
+            } else
+                Menu.Timer.Second--;
+        }
     }
 }

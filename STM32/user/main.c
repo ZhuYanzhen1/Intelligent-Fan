@@ -1,7 +1,7 @@
 #include "main.h"
 
 Menu_Struct_t Menu;
-TaskHandle_t InitTask_Handler, UserTask_Handler;
+TaskHandle_t InitTask_Handler, MenuSwitchTask_Handler;
 TaskHandle_t CircleTask_Handler, MenuGUITask_Handler;
 
 void Menu_Config(void) {
@@ -29,7 +29,7 @@ void InitTask(void *pvParameters) {
     GUI_Clear(C_WHITE);
     Menu_Config();
     xTaskCreate(MenuSwitchTask, "MenuSwitchTask", 1024,
-                NULL, 2, &UserTask_Handler);
+                NULL, 2, &MenuSwitchTask_Handler);
     xTaskCreate(MenuGUITask, "MenuGUITask", 512,
                 NULL, 1, &MenuGUITask_Handler);
     xTaskCreate(CircleTask, "CircleTask", 512,
